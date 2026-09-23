@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gull & Guys Fast Food - Satellite Town, Gujranwala</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Poppins & Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            orange: '#f97316',
+                            amber: '#f59e0b',
+                            dark: '#0a0a0a',
+                            card: '#121212',
+                            cardHover: '#18181b',
+                            border: '#27272a'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Poppins', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #27272a;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #f97316;
+        }
+        
+        .glass-header {
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        
+        .glass-card {
+            background: rgba(24, 24, 27, 0.7);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(249, 115, 22, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .glow-amber {
+            box-shadow: 0 0 25px -5px rgba(245, 158, 11, 0.3);
+        }
+
+        .glow-orange {
+            box-shadow: 0 0 20px -3px rgba(249, 115, 22, 0.35);
+        }
+
+        /* Pulse animation for Live status indicator */
+        @keyframes pulse-dot {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.3); opacity: 0.6; }
+        }
+        .animate-pulse-dot {
+            animation: pulse-dot 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        /* Toast animation */
+        @keyframes slideInUp {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .toast-enter {
+            animation: slideInUp 0.3s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-neutral-950 text-neutral-100 font-sans antialiased min-h-screen selection:bg-orange-500 selection:text-white flex flex-col justify-between">
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed bottom-20 right-4 md:bottom-6 md:right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- Header / Navigation Bar -->
+    <header class="sticky top-0 z-40 glass-header border-b border-neutral-800/80 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            
+            <!-- Brand Logo -->
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-orange-600 to-amber-400 flex items-center justify-center text-neutral-950 font-black text-xl shadow-lg shadow-orange-500/20 group-hover:scale-105 transition-transform duration-300">
+                    G&G
+                </div>
+                <div>
+                    <div class="font-display font-black text-xl sm:text-2xl tracking-tight bg-gradient-to-r from-white via-neutral-100 to-neutral-400 bg-clip-text text-transparent group-hover:text-amber-400 transition-colors">
+                        GULL & GUYS
+                    </div>
+                    <div class="text-[10px] font-semibold uppercase tracking-widest text-amber-500 -mt-1">
+                        Fast Food • Satellite Town
+                    </div>
+                </div>
+            </a>
+
+            <!-- Desktop Links & Live Status -->
+            <div class="hidden md:flex items-center gap-6">
+                <!-- Status Badge -->
+                <div id="live-status-badge" class="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-neutral-900 border border-neutral-800 text-xs font-medium">
+                    <!-- JS will populate -->
+                </div>
+
+                <nav class="flex items-center gap-6 text-sm font-medium text-neutral-300">
+                    <a href="#menu" class="hover:text-amber-400 transition-colors">Menu</a>
+                    <a href="#about" class="hover:text-amber-400 transition-colors">About</a>
+                    <a href="#reviews" class="hover:text-amber-400 transition-colors">Reviews</a>
+                    <a href="#location" class="hover:text-amber-400 transition-colors">Contact</a>
+                </nav>
+
+                <!-- Phone Call Button -->
+                <a href="tel:03187999388" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 text-amber-400 font-semibold text-xs transition-all hover:scale-105">
+                    <i class="fa-solid fa-phone text-sm"></i>
+                    <span>0318 7999388</span>
+                </a>
+
+                <!-- Cart Button -->
+                <button onclick="toggleCartDrawer()" class="relative p-3 rounded-xl bg-neutral-900 border border-neutral-800 text-neutral-200 hover:text-amber-400 hover:border-amber-500/50 transition-all hover:scale-105 group">
+                    <i class="fa-solid fa-cart-shopping text-lg"></i>
+                    <span id="cart-badge-count" class="absolute -top-1.5 -right-1.5 bg-gradient-to-r from-orange-500 to-amber-500 text-neutral-950 font-black text-[11px] w-5 h-5 rounded-full flex items-center justify-center shadow-md shadow-orange-500/30 scale-0 transition-transform duration-300">0</span>
+                </button>
+            </div>
+
+            <!-- Mobile Cart Button & Nav Trigger -->
+            <div class="flex items-center gap-3 md:hidden">
+                <button onclick="toggleCartDrawer()" class="relative p-2.5 rounded-xl bg-neutral-900 border border-neutral-800 text-neutral-200">
+                    <i class="fa-solid fa-cart-shopping text-base"></i>
+                    <span id="cart-badge-count-mobile" class="absolute -top-1 -right-1 bg-amber-500 text-neutral-950 font-bold text-[10px] w-4 h-4 rounded-full flex items-center justify-center">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden py-12 lg:py-20 bg-gradient-to-b from-neutral-950 via-neutral-900/60 to-neutral-950">
+        <!-- Ambient Background Light -->
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-orange-600/20 to-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid lg:grid-cols-12 gap-10 items-center">
+                
+                <!-- Hero Left Text -->
+                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                    
+                    <!-- Rating Badge -->
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-neutral-900/90 border border-amber-500/30 text-xs sm:text-sm font-medium shadow-md">
+                        <div class="flex text-amber-400 text-xs">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star-half-stroke"></i>
+                        </div>
+                        <span class="font-bold text-white">4.7 Rating</span>
+                        <span class="text-neutral-500">•</span>
+                        <span class="text-neutral-400">(204+ Google Reviews)</span>
+                    </div>
+
+                    <!-- Main Headline -->
+                    <h1 class="font-display font-black text-4xl sm:text-5xl lg:text-6xl tracking-tight leading-tight">
+                        Craving <span class="bg-gradient-to-r from-orange-500 via-amber-400 to-yellow-300 bg-clip-text text-transparent">Sizzling & Crispy</span> Fast Food?
+                    </h1>
+
+                    <!-- Description -->
+                    <p class="text-neutral-400 text-base sm:text-lg max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
+                        Indulge in Gujranwala’s finest juicy fillet burgers, signature crispy wraps, cheese-loaded fries, and grilled platters. Freshly prepared daily in Satellite Town.
+                    </p>
+
+                    <!-- CTAs -->
+                    <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
+                        <a href="#menu" class="px-8 py-4 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-neutral-950 font-extrabold text-base hover:from-orange-600 hover:to-amber-600 transition-all shadow-lg shadow-orange-500/25 hover:scale-105 active:scale-95 flex items-center gap-2">
+                            <span>Explore Menu</span>
+                            <i class="fa-solid fa-arrow-down-long"></i>
+                        </a>
+                        
+                        <a href="https://wa.me/923187999388" target="_blank" class="px-7 py-4 rounded-xl bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 text-neutral-200 font-bold text-base transition-all hover:scale-105 active:scale-95 flex items-center gap-2">
+                            <i class="fa-brands fa-whatsapp text-green-500 text-xl"></i>
+                            <span>Quick WhatsApp Order</span>
+                        </a>
+                    </div>
+
+                    <!-- Feature Badges -->
+                    <div class="pt-6 grid grid-cols-3 gap-3 max-w-md mx-auto lg:mx-0 text-left border-t border-neutral-800/80">
+                        <div class="flex items-center gap-2.5">
+                            <i class="fa-solid fa-bolt text-amber-500 text-sm sm:text-base"></i>
+                            <span class="text-xs sm:text-sm font-medium text-neutral-300">Fast Delivery</span>
+                        </div>
+                        <div class="flex items-center gap-2.5">
+                            <i class="fa-solid fa-drumstick-bite text-amber-500 text-sm sm:text-base"></i>
+                            <span class="text-xs sm:text-sm font-medium text-neutral-300">100% Fresh</span>
+                        </div>
+                        <div class="flex items-center gap-2.5">
+                            <i class="fa-solid fa-fire text-amber-500 text-sm sm:text-base"></i>
+                            <span class="text-xs sm:text-sm font-medium text-neutral-300">Hot & Spicy</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Hero Right Graphic Display -->
+                <div class="lg:col-span-5 relative flex justify-center">
+                    <div class="relative w-full max-w-md aspect-square rounded-3xl overflow-hidden glass-card p-3 shadow-2xl group">
+                        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800&auto=format&fit=crop" 
+                             alt="Gull & Guys Special Burger" 
+                             class="w-full h-full object-cover rounded-2xl group-hover:scale-105 transition-transform duration-500"
+                             onerror="this.src='https://placehold.co/600x600/18181b/f97316?text=Gull+%26+Guys+Fast+Food'">
+                        
+                        <!-- Floating Badge on Hero Image -->
+                        <div class="absolute bottom-6 left-6 right-6 p-4 rounded-xl glass-header border border-neutral-700/60 shadow-xl flex items-center justify-between">
+                            <div>
+                                <span class="text-xs text-amber-400 font-bold uppercase tracking-wider block">Bestseller Pick</span>
+                                <h4 class="font-bold text-white text-base">Guys Crispy Burger</h4>
+                                <p class="text-xs text-neutral-400">Rs 690 • Loaded Seasoned Meat</p>
+                            </div>
+                            <button onclick="addToCart('m2')" class="px-3 py-2 rounded-lg bg-orange-500 hover:bg-orange-600 text-neutral-950 font-bold text-xs transition-colors flex items-center gap-1">
+                                <i class="fa-solid fa-plus"></i> Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section id="menu" class="py-16 bg-neutral-950 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Section Title -->
+            <div class="text-center max-w-3xl mx-auto mb-10">
+                <span class="text-amber-500 font-extrabold text-xs tracking-widest uppercase mb-2 block">Our Delicious Selection</span>
+                <h2 class="font-display font-black text-3xl sm:text-4xl lg:text-5xl tracking-tight text-white">
+                    Explore The Full Menu
+                </h2>
+                <p class="text-neutral-400 text-sm sm:text-base mt-2">
+                    Pick your favorite burgers, wraps, loaded fries, and platters prepared hot and fresh.
+                </p>
+            </div>
+
+            <!-- Search and Filter Bar Controls -->
+            <div class="space-y-6 mb-10">
+                
+                <!-- Live Search Bar -->
+                <div class="max-w-md mx-auto relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-neutral-500"></i>
+                    <input type="text" 
+                           id="search-input" 
+                           oninput="handleSearch()"
+                           placeholder="Search burgers, wraps, fries, dips..." 
+                           class="w-full bg-neutral-900 border border-neutral-800 rounded-2xl py-3.5 pl-11 pr-10 text-neutral-100 placeholder-neutral-500 text-sm focus:outline-none focus:border-amber-500 transition-colors">
+                    <button id="search-clear-btn" onclick="clearSearch()" class="hidden absolute right-4 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-neutral-300">
+                        <i class="fa-solid fa-circle-xmark"></i>
+                    </button>
+                </div>
+
+                <!-- Category Pills (Horizontal Scrollable) -->
+                <div class="flex items-center justify-start md:justify-center gap-2 overflow-x-auto pb-3 pt-1 scrollbar-none px-2" id="category-tabs">
+                    <!-- Dynamic tabs populated via JavaScript -->
+                </div>
+            </div>
+
+            <!-- Menu Item Grid -->
+            <div id="menu-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Dynamically populated menu cards -->
+            </div>
+
+            <!-- Empty State when no search match -->
+            <div id="no-results" class="hidden text-center py-16 space-y-3">
+                <i class="fa-solid fa-utensils text-4xl text-neutral-700"></i>
+                <h3 class="text-lg font-bold text-neutral-300">No items found</h3>
+                <p class="text-sm text-neutral-500">Try searching for something else like "burger", "wrap" or "fries".</p>
+                <button onclick="clearSearch()" class="px-4 py-2 rounded-xl bg-neutral-900 border border-neutral-800 text-amber-400 text-xs font-semibold hover:bg-neutral-800">
+                    Reset Filter
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section id="reviews" class="py-16 bg-neutral-900/50 border-y border-neutral-800/80 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+                <div>
+                    <span class="text-amber-500 font-extrabold text-xs tracking-widest uppercase block mb-1">Loved by Satellite Town</span>
+                    <h2 class="font-display font-black text-3xl sm:text-4xl text-white">Customer Reviews</h2>
+                </div>
+                <div class="flex items-center gap-3 bg-neutral-900 px-4 py-2.5 rounded-2xl border border-neutral-800 self-start">
+                    <span class="font-black text-2xl text-amber-400">4.7</span>
+                    <div>
+                        <div class="flex text-amber-400 text-xs">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star-half-stroke"></i>
+                        </div>
+                        <span class="text-xs text-neutral-400 font-medium">Based on 204 Google Reviews</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Review Card 1 -->
+                <div class="glass-card p-6 rounded-2xl space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-amber-500 to-orange-500 flex items-center justify-center font-bold text-neutral-950 text-sm">
+                                AH
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-sm">Ali Hassan</h4>
+                                <span class="text-[11px] text-neutral-500">Gujranwala Resident</span>
+                            </div>
+                        </div>
+                        <div class="flex text-amber-400 text-xs">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="text-neutral-300 text-sm leading-relaxed">
+                        "The Serious Fillet Burger and Loaded Fries are absolutely top-tier! Best fast food spot in Satellite Town hands down. Fast delivery as well."
+                    </p>
+                </div>
+
+                <!-- Review Card 2 -->
+                <div class="glass-card p-6 rounded-2xl space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-orange-500 to-red-500 flex items-center justify-center font-bold text-neutral-950 text-sm">
+                                US
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-sm">Usman Shah</h4>
+                                <span class="text-[11px] text-neutral-500">Foodie</span>
+                            </div>
+                        </div>
+                        <div class="flex text-amber-400 text-xs">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="text-neutral-300 text-sm leading-relaxed">
+                        "Tried the Guys Special Platter with friends. Massive portion, tender chicken, fresh mushrooms and olives. Worth every single rupee!"
+                    </p>
+                </div>
+
+                <!-- Review Card 3 -->
+                <div class="glass-card p-6 rounded-2xl space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-amber-400 to-yellow-500 flex items-center justify-center font-bold text-neutral-950 text-sm">
+                                ZK
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-sm">Zainab Khan</h4>
+                                <span class="text-[11px] text-neutral-500">Regular Customer</span>
+                            </div>
+                        </div>
+                        <div class="flex text-amber-400 text-xs">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="text-neutral-300 text-sm leading-relaxed">
+                        "The Crispy Pro Wrap is my late-night craving go-to! Crunchy tortilla with super juicy chicken and garlic dip. Highly recommended!"
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Location & Contact Info Section -->
+    <section id="location" class="py-16 bg-neutral-950">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-10 items-center">
+                
+                <!-- Info Left -->
+                <div class="space-y-6">
+                    <span class="text-amber-500 font-extrabold text-xs tracking-widest uppercase block">Visit & Contact Us</span>
+                    <h2 class="font-display font-black text-3xl sm:text-4xl text-white">Find Gull & Guys</h2>
+                    <p class="text-neutral-400 text-sm sm:text-base">
+                        Located right in the heart of Main Market Satellite Town, opposite Khaadi. Stop by for takeaway or place your order online for fast delivery!
+                    </p>
+
+                    <div class="space-y-4 text-sm">
+                        <!-- Address -->
+                        <div class="flex items-start gap-4 p-4 rounded-2xl bg-neutral-900 border border-neutral-800">
+                            <div class="w-10 h-10 rounded-xl bg-orange-500/10 border border-orange-500/20 text-orange-500 flex items-center justify-center shrink-0">
+                                <i class="fa-solid fa-location-dot text-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white mb-0.5">Address</h4>
+                                <p class="text-neutral-400">119-A New Diners, Main Market, opposite Khaadi, Block A Satellite Town, Gujranwala, 52250</p>
+                            </div>
+                        </div>
+
+                        <!-- Hours -->
+                        <div class="flex items-start gap-4 p-4 rounded-2xl bg-neutral-900 border border-neutral-800">
+                            <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-500 flex items-center justify-center shrink-0">
+                                <i class="fa-solid fa-clock text-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white mb-0.5">Operating Hours</h4>
+                                <p class="text-neutral-400">Daily 3:00 PM – 11:59 PM (PKT)</p>
+                            </div>
+                        </div>
+
+                        <!-- Phone -->
+                        <div class="flex items-start gap-4 p-4 rounded-2xl bg-neutral-900 border border-neutral-800">
+                            <div class="w-10 h-10 rounded-xl bg-green-500/10 border border-green-500/20 text-green-500 flex items-center justify-center shrink-0">
+                                <i class="fa-solid fa-phone text-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white mb-0.5">Phone / WhatsApp</h4>
+                                <p class="text-neutral-400">0318 7999388 / +92 318 7999388</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap gap-4 pt-2">
+                        <a href="https://maps.google.com/?q=Gull+%26+Guys+Fast+Food+Satellite+Town+Gujranwala" target="_blank" class="px-6 py-3.5 rounded-xl bg-neutral-900 hover:bg-neutral-800 border border-neutral-700 text-neutral-100 font-bold text-sm transition-all flex items-center gap-2">
+                            <i class="fa-solid fa-map-location-dot text-amber-500"></i>
+                            <span>Open in Google Maps</span>
+                        </a>
+                        <a href="tel:03187999388" class="px-6 py-3.5 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-neutral-950 font-bold text-sm transition-all hover:scale-105 flex items-center gap-2">
+                            <i class="fa-solid fa-phone"></i>
+                            <span>Call Now</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right Card Map Graphic Placeholder / Direct Embed Info -->
+                <div class="rounded-3xl border border-neutral-800 bg-neutral-900 p-6 space-y-6 relative overflow-hidden">
+                    <div class="absolute -right-10 -bottom-10 w-60 h-60 bg-orange-600/10 rounded-full blur-2xl pointer-events-none"></div>
+                    
+                    <div class="flex items-center justify-between border-b border-neutral-800 pb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-3 h-3 rounded-full bg-green-500 animate-pulse"></div>
+                            <span class="font-bold text-white text-sm">Gull & Guys Fast Food Outlet</span>
+                        </div>
+                        <span class="text-xs text-amber-400 font-semibold">Block A Satellite Town</span>
+                    </div>
+
+                    <div class="aspect-video rounded-2xl bg-neutral-950 border border-neutral-800 flex flex-col items-center justify-center p-6 text-center space-y-3">
+                        <i class="fa-solid fa-store text-4xl text-amber-500"></i>
+                        <div>
+                            <h4 class="font-bold text-white text-base">Opposite Khaadi, Main Market</h4>
+                            <p class="text-xs text-neutral-400 max-w-xs mt-1">Satellite Town, Gujranwala, Punjab, Pakistan</p>
+                        </div>
+                        <a href="https://maps.google.com/?q=119-A+New+Diners+Main+Market+Satellite+Town+Gujranwala" target="_blank" class="px-4 py-2 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 text-xs font-bold transition-colors">
+                            <i class="fa-solid fa-directions mr-1"></i> Get Directions
+                        </a>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 text-center">
+                        <div class="p-3 rounded-xl bg-neutral-950/60 border border-neutral-800">
+                            <span class="text-xs text-neutral-500 block">Average Meal Cost</span>
+                            <span class="font-bold text-amber-400 text-sm">Rs 1,000 – 2,000</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-neutral-950/60 border border-neutral-800">
+                            <span class="text-xs text-neutral-500 block">Service Options</span>
+                            <span class="font-bold text-amber-400 text-sm">Dine-in • Takeaway • Delivery</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Slide-Over Drawer -->
+    <div id="cart-backdrop" onclick="toggleCartDrawer()" class="fixed inset-0 bg-neutral-950/80 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+
+    <div id="cart-drawer" class="fixed top-0 right-0 bottom-0 w-full max-w-md bg-neutral-900 border-l border-neutral-800 z-50 translate-x-full transition-transform duration-300 flex flex-col justify-between shadow-2xl">
+        
+        <!-- Cart Header -->
+        <div class="p-5 border-b border-neutral-800 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-white text-base">Your Order Cart</h3>
+                    <p class="text-xs text-neutral-400" id="cart-items-count-text">0 items selected</p>
+                </div>
+            </div>
+            <button onclick="toggleCartDrawer()" class="w-8 h-8 rounded-lg bg-neutral-800 text-neutral-400 hover:text-white flex items-center justify-center">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <!-- Cart Body (Scrollable items) -->
+        <div class="p-5 overflow-y-auto flex-1 space-y-4" id="cart-items-container">
+            <!-- Populated dynamically via JS -->
+        </div>
+
+        <!-- Cart Footer & Checkout Form -->
+        <div id="cart-footer" class="p-5 border-t border-neutral-800 bg-neutral-950 space-y-4">
+            
+            <!-- Delivery Type Selector -->
+            <div class="grid grid-cols-2 gap-2 p-1 bg-neutral-900 rounded-xl border border-neutral-800 text-xs font-semibold">
+                <button type="button" id="btn-delivery" onclick="setDeliveryType('delivery')" class="py-2.5 rounded-lg text-center bg-gradient-to-r from-orange-500 to-amber-500 text-neutral-950 transition-all">
+                    <i class="fa-solid fa-motorcycle mr-1"></i> Delivery
+                </button>
+                <button type="button" id="btn-takeaway" onclick="setDeliveryType('takeaway')" class="py-2.5 rounded-lg text-center text-neutral-400 hover:text-white transition-all">
+                    <i class="fa-solid fa-bag-shopping mr-1"></i> Takeaway
+                </button>
+            </div>
+
+            <!-- Customer Details Form -->
+            <div class="space-y-3">
+                <div>
+                    <input type="text" id="cust-name" placeholder="Your Name *" class="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-amber-500">
+                </div>
+                <div>
+                    <input type="tel" id="cust-phone" placeholder="WhatsApp / Phone Number *" class="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-amber-500">
+                </div>
+                <div id="delivery-address-wrapper">
+                    <textarea id="cust-address" rows="2" placeholder="Delivery Address in Satellite Town / Gujranwala *" class="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-amber-500 resize-none"></textarea>
+                </div>
+            </div>
+
+            <!-- Bill Breakdown -->
+            <div class="space-y-1.5 pt-2 border-t border-neutral-800 text-xs">
+                <div class="flex justify-between text-neutral-400">
+                    <span>Subtotal</span>
+                    <span id="summary-subtotal" class="font-medium text-white">Rs 0</span>
+                </div>
+                <div class="flex justify-between text-neutral-400" id="summary-delivery-row">
+                    <span>Delivery Fee</span>
+                    <span id="summary-delivery" class="font-medium text-white">Rs 150</span>
+                </div>
+                <div class="flex justify-between text-sm font-bold text-white pt-2 border-t border-neutral-800">
+                    <span>Grand Total</span>
+                    <span id="summary-total" class="text-amber-400 font-extrabold text-base">Rs 0</span>
+                </div>
+            </div>
+
+            <!-- WhatsApp Submit Button -->
+            <button onclick="submitWhatsAppOrder()" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-extrabold text-sm transition-all shadow-lg shadow-green-600/20 flex items-center justify-center gap-2">
+                <i class="fa-brands fa-whatsapp text-lg"></i>
+                <span>Place Order via WhatsApp</span>
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-neutral-950 border-t border-neutral-900 py-10 text-neutral-400 text-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-amber-500 flex items-center justify-center text-neutral-950 font-black text-base">
+                        G&G
+                    </div>
+                    <div>
+                        <span class="font-bold text-white text-sm block">Gull & Guys Fast Food</span>
+                        <span class="text-[11px] text-neutral-500">119-A New Diners, Satellite Town, Gujranwala</span>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-6 font-medium text-neutral-400">
+                    <a href="#menu" class="hover:text-amber-400 transition-colors">Menu</a>
+                    <a href="#about" class="hover:text-amber-400 transition-colors">About</a>
+                    <a href="#reviews" class="hover:text-amber-400 transition-colors">Reviews</a>
+                    <a href="#location" class="hover:text-amber-400 transition-colors">Location</a>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <a href="https://wa.me/923187999388" target="_blank" class="w-9 h-9 rounded-xl bg-neutral-900 border border-neutral-800 flex items-center justify-center text-neutral-300 hover:text-green-400 hover:border-green-500/50 transition-colors">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </a>
+                    <a href="tel:03187999388" class="w-9 h-9 rounded-xl bg-neutral-900 border border-neutral-800 flex items-center justify-center text-neutral-300 hover:text-amber-400 hover:border-amber-500/50 transition-colors">
+                        <i class="fa-solid fa-phone"></i>
+                    </a>
+                </div>
+
+            </div>
+
+            <div class="border-t border-neutral-900 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left text-neutral-500">
+                <p>&copy; <span id="current-year"></span> Gull & Guys Fast Food. All Rights Reserved.</p>
+                <p>Designed for fast & delicious online ordering in Gujranwala.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        /* Menu Items Master Database strictly reflecting provided menu */
+        const MENU_DATA = [
+            // BURGERS
+            {
+                id: 'm1',
+                name: 'Serious Fillet Burger',
+                category: 'Burgers',
+                price: 500,
+                desc: 'Juicy beef patty topped with fresh vegetables and creamy sauce, served in a soft bun.',
+                image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&auto=format&fit=crop',
+                badge: 'Popular'
+            },
+            {
+                id: 'm2',
+                name: 'Guys Crispy Burger',
+                category: 'Burgers',
+                price: 690,
+                desc: 'Crispy sandwich with seasoned meat, fresh vegetables, and flavorful sauce in a toasted bun.',
+                image: 'https://images.unsplash.com/photo-1550547660-d9450f859349?w=500&auto=format&fit=crop',
+                badge: 'Bestseller'
+            },
+            {
+                id: 'm3',
+                name: 'Mini Fillet Burger',
+                category: 'Burgers',
+                price: 300,
+                desc: 'Juicy mini beef patties served in soft buns with fresh toppings.',
+                image: 'https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?w=500&auto=format&fit=crop'
+            },
+            {
+                id: 'm4',
+                name: 'Hunger Mitigate Burger',
+                category: 'Burgers',
+                price: 600,
+                desc: 'Juicy beef patty topped with fresh vegetables and special sauce on a toasted bun.',
+                image: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=500&auto=format&fit=crop'
+            },
+            {
+                id: 'm5',
+                name: 'Juicy Steak Burger',
+                category: 'Burgers',
+                price: 590,
+                desc: 'A flavorful, juicy beef patty served in a soft bun with fresh toppings.',
+                image: 'https://images.unsplash.com/photo-1607013251379-e6eecfffe234?w=500&auto=format&fit=crop'
+            },
+
+            // FRIED ITEMS
+            {
+                id: 'm6',
+                name: 'Chicken Bites',
+                category: 'Fried Item',
+                price: 590,
+                desc: 'Deep fried crispy chicken pieces featuring a savory flavor.',
+                image: 'https://images.unsplash.com/photo-1562967914-608f82629710?w=500&auto=format&fit=crop'
+            },
+
+            // WRAPS
+            {
+                id: 'm7',
+                name: 'Guys Special Wrap',
+                category: 'Wraps',
+                price: 650,
+                desc: 'A flavorful wrap filled with savory ingredients, perfect for a satisfying meal on-the-go.',
+                image: 'https://images.unsplash.com/photo-1626700051175-6818013e1d4f?w=500&auto=format&fit=crop',
+                badge: 'Special'
+            },
+            {
+                id: 'm8',
+                name: 'Signature Wrap',
+                category: 'Wraps',
+                price: 600,
+                desc: 'Savory filling encased in a soft tortilla, perfect for a quick and delicious meal.',
+                image: 'https://images.unsplash.com/photo-1509722747041-616f39b57569?w=500&auto=format&fit=crop'
+            },
+            {
+                id: 'm9',
+                name: 'Crispy Pro Wrap',
+                category: 'Wraps',
+                price: 650,
+                desc: 'Crispy tortilla filled with savory ingredients, offering a delightful crunch and rich flavors.',
+                image: 'https://images.unsplash.com/photo-1626700051175-6818013e1d4f?w=500&auto=format&fit=crop'
+            },
+            {
+                id: 'm10',
+                name: 'Crispy Wrap',
+                category: 'Wraps',
+                price: 500,
+                desc: 'Crispy, golden-brown outer layer filled with savory, seasoned meat and fresh vegetables.',
+                image: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=500&auto=format&fit=crop'
+            },
+            {
+                id: 'm11',
+                name: 'Guys Steak Wrap',
+                category: 'Wraps',
+                price: 600,
+                desc: 'Savory steak wrapped with fresh vegetables and flavorful sauces in a soft tortilla.',
+                image: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=500&auto=format&fit=crop'
+            },
+
+            // FRIES
+            {
+                id: 'm12',
+                name: 'Garlic Fries',
+                category: 'Fries',
+                price: 380,
+                desc: 'Crispy potatoes tossed in garlic and herbs, served hot and flavorful.',
+                image: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=500&auto=format&fit=crop'
+            },
+            {
+                id: 'm13',
+                name: 'Loaded Fries',
+                category: 'Fries',
+                price: 500,
+                desc: 'Crispy fries topped with melted cheese, savory toppings, and drizzled with flavorful sauces.',
+                image: 'https://images.unsplash.com/photo-1630384060421-cb20d0e0649d?w=500&auto=format&fit=crop',
+                badge: 'Hot'
+            },
+            {
+                id: 'm14',
+                name: 'Crispy Loaded Fries',
+                category: 'Fries',
+                price: 620,
+                desc: 'Crispy fries topped with melted cheese, savory toppings, and drizzled with flavorful sauces.',
+                image: 'https://images.unsplash.com/photo-1585109649139-366815a0d713?w=500&auto=format&fit=crop'
+            },
+
+            // PLATTERS
+            {
+                id: 'm15',
+                name: 'Signature Platter OWP',
+                category: 'Platters',
+                price: 800,
+                desc: '2 Tortilla bread, chunks of grilled chicken & fries.',
+                image: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=500&auto=format&fit=crop'
+            },
+            {
+                id: 'm16',
+                name: 'Guys Special Platter',
+                category: 'Platters',
+                price: 1000,
+                desc: '2 Tortilla bread, olives, mushrooms, jalapenos, lettuce, fries & chicken.',
+                image: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=500&auto=format&fit=crop',
+                badge: 'Chef Special'
+            },
+
+            // SIDES & DIPS
+            {
+                id: 'm17',
+                name: 'Paratha',
+                category: 'Sides & Dips',
+                price: 430,
+                desc: 'Flaky, layered flatbread often served with various curries or dips.',
+                image: 'https://images.unsplash.com/photo-1626074353765-517a681e40be?w=500&auto=format&fit=crop'
+            },
+            {
+                id: 'm18',
+                name: 'Guys Sauce',
+                category: 'Sides & Dips',
+                price: 50,
+                desc: 'Savory sauce served with tender meat and flavorful sides.',
+                image: 'https://images.unsplash.com/photo-1472476443507-c7a5948772fc?w=500&auto=format&fit=crop'
+            },
+            {
+                id: 'm19',
+                name: 'Chipotle Dip',
+                category: 'Sides & Dips',
+                price: 50,
+                desc: 'Creamy, spicy blend of beans, cheese, and peppers.',
+                image: 'https://images.unsplash.com/photo-1571115764595-644a1f56a55c?w=500&auto=format&fit=crop'
+            },
+            {
+                id: 'm20',
+                name: 'Garlic Dip',
+                category: 'Sides & Dips',
+                price: 50,
+                desc: 'Creamy garlic blend perfect for dipping.',
+                image: 'https://images.unsplash.com/photo-1585238342024-78d387f4a707?w=500&auto=format&fit=crop'
+            }
+        ];
+
+        /* Application State */
+        let cart = [];
+        let activeCategory = 'All';
+        let searchQuery = '';
+        let deliveryType = 'delivery'; // 'delivery' or 'takeaway'
+        const DELIVERY_FEE = 150;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+            initLiveStatus();
+            renderCategoryTabs();
+            renderMenuGrid();
+            updateCartUI();
+        });
+
+        /* Live Status Check (3:00 PM to 11:59 PM) */
+        function initLiveStatus() {
+            const badge = document.getElementById('live-status-badge');
+            const now = new Date();
+            const hour = now.getHours();
+            
+            // Hours 15 (3:00 PM) to 23 (11:59 PM)
+            const isOpen = hour >= 15 && hour < 24;
+
+            if (isOpen) {
+                badge.innerHTML = `
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse-dot"></span>
+                    <span class="text-emerald-400 font-bold">OPEN NOW</span>
+                    <span class="text-neutral-500">• 3 PM - 12 AM</span>
+                `;
+            } else {
+                badge.innerHTML = `
+                    <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+                    <span class="text-rose-400 font-bold">CLOSED NOW</span>
+                    <span class="text-neutral-500">• Opens at 3 PM</span>
+                `;
+            }
+        }
+
+        /* Category Filter Tabs Rendering */
+        function renderCategoryTabs() {
+            const categories = ['All', 'Burgers', 'Fried Item', 'Wraps', 'Fries', 'Platters', 'Sides & Dips'];
+            const container = document.getElementById('category-tabs');
+            
+            container.innerHTML = categories.map(cat => {
+                const count = cat === 'All' ? MENU_DATA.length : MENU_DATA.filter(i => i.category === cat).length;
+                const isActive = activeCategory === cat;
+                
+                return `
+                    <button onclick="setCategory('${cat}')" 
+                            class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap flex items-center gap-2 ${
+                                isActive 
+                                ? 'bg-amber-500 text-neutral-950 shadow-md shadow-amber-500/20' 
+                                : 'bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-white hover:border-neutral-700'
+                            }">
+                        <span>${cat}</span>
+                        <span class="${isActive ? 'bg-neutral-950/20 text-neutral-950' : 'bg-neutral-800 text-neutral-400'} px-1.5 py-0.5 rounded-md text-[10px]">
+                            ${count}
+                        </span>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function setCategory(cat) {
+            activeCategory = cat;
+            renderCategoryTabs();
+            renderMenuGrid();
+        }
+
+        function handleSearch() {
+            const input = document.getElementById('search-input');
+            searchQuery = input.value.trim().toLowerCase();
+            
+            const clearBtn = document.getElementById('search-clear-btn');
+            if (searchQuery) {
+                clearBtn.classList.remove('hidden');
+            } else {
+                clearBtn.classList.add('hidden');
+            }
+            
+            renderMenuGrid();
+        }
+
+        function clearSearch() {
+            document.getElementById('search-input').value = '';
+            searchQuery = '';
+            document.getElementById('search-clear-btn').classList.add('hidden');
+            renderMenuGrid();
+        }
+
+        /* Render Menu Grid based on Category & Search */
+        function renderMenuGrid() {
+            const grid = document.getElementById('menu-grid');
+            const noResults = document.getElementById('no-results');
+
+            let filtered = MENU_DATA.filter(item => {
+                const matchCategory = activeCategory === 'All' || item.category === activeCategory;
+                const matchSearch = item.name.toLowerCase().includes(searchQuery) || 
+                                    item.desc.toLowerCase().includes(searchQuery) ||
+                                    item.category.toLowerCase().includes(searchQuery);
+                return matchCategory && matchSearch;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                noResults.classList.remove('hidden');
+                return;
+            }
+
+            noResults.classList.add('hidden');
+            grid.innerHTML = filtered.map(item => `
+                <div class="glass-card rounded-2xl overflow-hidden flex flex-col justify-between group transition-all duration-300">
+                    <div>
+                        <!-- Image Container -->
+                        <div class="relative aspect-[4/3] overflow-hidden bg-neutral-900">
+                            <img src="${item.image}" 
+                                 alt="${item.name}" 
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                 onerror="this.src='https://placehold.co/400x300/18181b/f97316?text=${encodeURIComponent(item.name)}'">
+                            
+                            ${item.badge ? `
+                                <span class="absolute top-3 left-3 bg-gradient-to-r from-orange-500 to-amber-500 text-neutral-950 font-black text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-md shadow-md">
+                                    ${item.badge}
+                                </span>
+                            ` : ''}
+
+                            <div class="absolute bottom-2 right-2 bg-neutral-950/80 backdrop-blur-md px-3 py-1 rounded-lg border border-neutral-800 text-amber-400 font-black text-sm">
+                                Rs ${item.price.toLocaleString()}
+                            </div>
+                        </div>
+
+                        <!-- Card Content -->
+                        <div class="p-4 space-y-2">
+                            <span class="text-[10px] font-bold text-amber-500 tracking-wider uppercase block">${item.category}</span>
+                            <h3 class="font-bold text-white text-base leading-snug group-hover:text-amber-400 transition-colors">
+                                ${item.name}
+                            </h3>
+                            <p class="text-neutral-400 text-xs line-clamp-2 leading-relaxed">
+                                ${item.desc}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Add Button -->
+                    <div class="p-4 pt-0">
+                        <button onclick="addToCart('${item.id}')" 
+                                class="w-full py-2.5 rounded-xl bg-neutral-900 hover:bg-amber-500 hover:text-neutral-950 border border-neutral-800 hover:border-amber-500 text-amber-400 font-bold text-xs transition-all flex items-center justify-center gap-2 group/btn">
+                            <i class="fa-solid fa-plus text-xs group-hover/btn:scale-125 transition-transform"></i>
+                            <span>Add to Cart</span>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        /* Cart Management Functions */
+        function addToCart(itemId) {
+            const item = MENU_DATA.find(i => i.id === itemId);
+            if (!item) return;
+
+            const existing = cart.find(c => c.id === itemId);
+            if (existing) {
+                existing.quantity++;
+            } else {
+                cart.push({ ...item, quantity: 1 });
+            }
+
+            showToast(`Added 1x ${item.name} to cart!`);
+            updateCartUI();
+        }
+
+        function changeQuantity(itemId, delta) {
+            const idx = cart.findIndex(c => c.id === itemId);
+            if (idx > -1) {
+                cart[idx].quantity += delta;
+                if (cart[idx].quantity <= 0) {
+                    cart.splice(idx, 1);
+                }
+            }
+            updateCartUI();
+        }
+
+        function removeFromCart(itemId) {
+            cart = cart.filter(c => c.id !== itemId);
+            updateCartUI();
+        }
+
+        function setDeliveryType(type) {
+            deliveryType = type;
+            const btnDelivery = document.getElementById('btn-delivery');
+            const btnTakeaway = document.getElementById('btn-takeaway');
+            const addressWrapper = document.getElementById('delivery-address-wrapper');
+            const deliveryRow = document.getElementById('summary-delivery-row');
+
+            if (type === 'delivery') {
+                btnDelivery.className = "py-2.5 rounded-lg text-center bg-gradient-to-r from-orange-500 to-amber-500 text-neutral-950 transition-all font-bold";
+                btnTakeaway.className = "py-2.5 rounded-lg text-center text-neutral-400 hover:text-white transition-all font-semibold";
+                addressWrapper.style.display = 'block';
+                deliveryRow.style.display = 'flex';
+            } else {
+                btnTakeaway.className = "py-2.5 rounded-lg text-center bg-gradient-to-r from-orange-500 to-amber-500 text-neutral-950 transition-all font-bold";
+                btnDelivery.className = "py-2.5 rounded-lg text-center text-neutral-400 hover:text-white transition-all font-semibold";
+                addressWrapper.style.display = 'none';
+                deliveryRow.style.display = 'none';
+            }
+
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+            
+            // Badges
+            const badgeCount = document.getElementById('cart-badge-count');
+            const badgeCountMobile = document.getElementById('cart-badge-count-mobile');
+            badgeCount.textContent = totalCount;
+            badgeCountMobile.textContent = totalCount;
+            
+            if (totalCount > 0) {
+                badgeCount.classList.remove('scale-0');
+            } else {
+                badgeCount.classList.add('scale-0');
+            }
+
+            document.getElementById('cart-items-count-text').textContent = `${totalCount} item${totalCount === 1 ? '' : 's'} selected`;
+
+            // Cart Items Container
+            const container = document.getElementById('cart-items-container');
+            const cartFooter = document.getElementById('cart-footer');
+
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-16 space-y-3">
+                        <i class="fa-solid fa-basket-shopping text-4xl text-neutral-700"></i>
+                        <h4 class="font-bold text-neutral-400 text-sm">Your cart is currently empty</h4>
+                        <p class="text-xs text-neutral-500 max-w-xs mx-auto">Browse our delicious menu and add burgers, wraps or fries to your order!</p>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = cart.map(item => `
+                    <div class="flex items-center justify-between p-3 rounded-xl bg-neutral-950 border border-neutral-800 gap-3">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <img src="${item.image}" alt="${item.name}" class="w-12 h-12 rounded-lg object-cover shrink-0">
+                            <div class="min-w-0">
+                                <h4 class="font-bold text-white text-xs truncate">${item.name}</h4>
+                                <span class="text-amber-400 font-semibold text-xs">Rs ${(item.price * item.quantity).toLocaleString()}</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-2 shrink-0">
+                            <div class="flex items-center bg-neutral-900 border border-neutral-800 rounded-lg p-1">
+                                <button onclick="changeQuantity('${item.id}', -1)" class="w-6 h-6 rounded bg-neutral-800 text-neutral-300 hover:text-white flex items-center justify-center text-xs">
+                                    <i class="fa-solid fa-minus"></i>
+                                </button>
+                                <span class="w-7 text-center font-bold text-xs text-white">${item.quantity}</span>
+                                <button onclick="changeQuantity('${item.id}', 1)" class="w-6 h-6 rounded bg-neutral-800 text-neutral-300 hover:text-white flex items-center justify-center text-xs">
+                                    <i class="fa-solid fa-plus"></i>
+                                </button>
+                            </div>
+                            <button onclick="removeFromCart('${item.id}')" class="text-neutral-500 hover:text-rose-500 p-1">
+                                <i class="fa-solid fa-trash-can text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Calculations
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const currentDeliveryFee = deliveryType === 'delivery' && subtotal > 0 ? DELIVERY_FEE : 0;
+            const grandTotal = subtotal + currentDeliveryFee;
+
+            document.getElementById('summary-subtotal').textContent = `Rs ${subtotal.toLocaleString()}`;
+            document.getElementById('summary-delivery').textContent = `Rs ${currentDeliveryFee.toLocaleString()}`;
+            document.getElementById('summary-total').textContent = `Rs ${grandTotal.toLocaleString()}`;
+        }
+
+        function toggleCartDrawer() {
+            const drawer = document.getElementById('cart-drawer');
+            const backdrop = document.getElementById('cart-backdrop');
+            
+            const isOpen = !drawer.classList.contains('translate-x-full');
+
+            if (isOpen) {
+                drawer.classList.add('translate-x-full');
+                backdrop.classList.add('opacity-0', 'pointer-events-none');
+            } else {
+                drawer.classList.remove('translate-x-full');
+                backdrop.classList.remove('opacity-0', 'pointer-events-none');
+            }
+        }
+
+        /* Toast notification generator */
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            toast.className = 'toast-enter px-4 py-3 rounded-xl bg-neutral-900 border border-amber-500/40 text-neutral-100 font-semibold text-xs shadow-xl flex items-center gap-2 backdrop-blur-md pointer-events-auto';
+            toast.innerHTML = `
+                <i class="fa-solid fa-circle-check text-amber-400 text-sm"></i>
+                <span>${message}</span>
+            `;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 2500);
+        }
+
+        /* WhatsApp Order Dispatch Function */
+        function submitWhatsAppOrder() {
+            if (cart.length === 0) {
+                showToast("Your cart is empty! Add items first.");
+                return;
+            }
+
+            const name = document.getElementById('cust-name').value.trim();
+            const phone = document.getElementById('cust-phone').value.trim();
+            const address = document.getElementById('cust-address').value.trim();
+
+            if (!name) {
+                showToast("Please enter your name.");
+                document.getElementById('cust-name').focus();
+                return;
+            }
+
+            if (!phone) {
+                showToast("Please enter your phone number.");
+                document.getElementById('cust-phone').focus();
+                return;
+            }
+
+            if (deliveryType === 'delivery' && !address) {
+                showToast("Please enter your delivery address.");
+                document.getElementById('cust-address').focus();
+                return;
+            }
+
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const currentDeliveryFee = deliveryType === 'delivery' ? DELIVERY_FEE : 0;
+            const grandTotal = subtotal + currentDeliveryFee;
+
+            // Build formatted WhatsApp message
+            let message = `🍔 *NEW ORDER - GULL & GUYS FAST FOOD* 🍔\n`;
+            message += `------------------------------------\n`;
+            message += `👤 *Customer Name:* ${name}\n`;
+            message += `📞 *Phone:* ${phone}\n`;
+            message += `📍 *Order Type:* ${deliveryType === 'delivery' ? 'Home Delivery 🚚' : 'Pickup / Takeaway 🛍️'}\n`;
+            if (deliveryType === 'delivery') {
+                message += `🏡 *Delivery Address:* ${address}\n`;
+            }
+            message += `------------------------------------\n`;
+            message += `🛒 *ORDERED ITEMS:*\n`;
+
+            cart.forEach((item, i) => {
+                const itemTotal = item.price * item.quantity;
+                message += `${i + 1}. *${item.name}* x ${item.quantity} = Rs ${itemTotal.toLocaleString()}\n`;
+            });
+
+            message += `------------------------------------\n`;
+            message += `💵 *Subtotal:* Rs ${subtotal.toLocaleString()}\n`;
+            if (deliveryType === 'delivery') {
+                message += `🚚 *Delivery Charges:* Rs ${currentDeliveryFee.toLocaleString()}\n`;
+            }
+            message += `💰 *GRAND TOTAL:* Rs ${grandTotal.toLocaleString()}\n`;
+            message += `------------------------------------\n`;
+            message += `Please confirm my order. Thank you!`;
+
+            const encodedMsg = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/923187999388?text=${encodedMsg}`;
+
+            window.open(whatsappUrl, '_blank');
+        }
+    </script>
+</body>
+</html>
